@@ -1,0 +1,68 @@
+## Censys Dorks for TP-Link Omada Controller
+## Target: 159.198.64.0/24 Network in Los Angeles, CA
+
+### Geographic & Vendor Targeting
+host.location.postal_code="90064" AND host.location.city="Los Angeles" AND (host.services.software.vendor="TP-Link" OR host.services.software.vendor="Omada")
+
+host.location.city="Los Angeles" AND host.location.postal_code="90064" AND (host.services.software.product="Omada Controller" OR host.services.software.product="TP-Link Omada")
+
+### Port 8043 Specific Queries
+host.services.port=8043 AND host.services.software.vendor="TP-Link"
+
+host.services.port=8043 AND host.services.http.response.headers.server="TP-Link" OR host.services.http.response.headers.server="Omada"
+
+host.services.port=8043 AND host.services.software.product="Omada"
+
+### IP Range Targeting
+(host.ip="159.198.64.*") AND (host.services.software.vendor="TP-Link" OR host.services.software.vendor="Omada Controller")
+
+(host.ip="159.198.64.0/24") AND host.services.port=8043
+
+### CVE-Vulnerable Version Detection
+host.services.software.vendor="TP-Link" AND (host.services.software.version="6.1.0" OR host.services.software.version="6.0.*" OR host.services.software.version="5.*")
+
+host.services.software.product="Omada Controller" AND host.services.port=8043 AND host.services.software.version=/(5\.|6\.0|6\.1)/
+
+### API Endpoint Detection
+host.services.http.response.body="api/v1" AND host.services.software.vendor="TP-Link"
+
+host.services.http.response.body="/api/info" AND host.services.port=8043
+
+host.services.http.response.body="network_settings" AND host.services.port=8043
+
+### Authentication Interface Detection
+host.services.http.response.body="login" AND host.services.software.product="Omada" AND host.services.port=8043
+
+host.services.http.response.title="Omada" AND host.services.port=8043
+
+### Network Management Systems
+host.services.software.product="Omada Controller" AND host.location.country="US" AND host.location.postal_code="90064"
+
+host.services.software.vendor="TP-Link" AND host.services.software.product=/(Omada|Gateway|Controller)/
+
+### WireGuard/VPN Module Detection
+host.services.http.response.body="wireguard" OR host.services.http.response.body="vpn" AND host.services.software.vendor="TP-Link"
+
+host.services.http.response.body="Private Key" AND host.services.port=8043 AND host.services.software.vendor="TP-Link"
+
+### Camera/POE Management
+host.services.software.product="Omada" AND (host.services.http.response.body="camera" OR host.services.http.response.body="poe" OR host.services.http.response.body="nvr")
+
+host.services.software.vendor="TP-Link" AND (host.services.port=8043 OR host.services.port=443) AND host.services.http.response.body="management"
+
+### Debug/Development Indicators
+host.services.http.response.body="debug" OR host.services.http.response.body="cli_server" AND host.services.software.vendor="TP-Link"
+
+host.services.http.response.headers.server=/(test|debug|dev)/i AND host.services.port=8043
+
+### Expanded Regional Targeting
+host.location.city="Los Angeles" AND host.services.port=8043 AND host.services.software.vendor="TP-Link"
+
+host.location.postal_code="90064" AND host.services.software.vendor="TP-Link"
+
+host.location.country="US" AND host.location.state="California" AND host.services.software.vendor="TP-Link" AND host.services.port=8043
+
+### Combined Vulnerability Indicators
+(host.services.software.vendor="TP-Link" OR host.services.software.product="Omada") AND host.services.port=8043 AND host.services.http.response.body=/(api|login|management)/
+
+host.ip="159.198.64.*" AND (host.services.http.response.body="Omada" OR host.services.http.response.body="TP-Link")
