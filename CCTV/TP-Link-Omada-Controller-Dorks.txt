@@ -1,0 +1,75 @@
+## TP-Link Omada Controller - Customized Google Dorks
+## Target: 159.198.64.0/24 (Casa Serena, Los Angeles, CA 90064)
+## Focus: CVE-2025-6541, CVE-2025-6542, CVE-2025-7850, CVE-2025-7851
+
+### Reconnaissance & Service Discovery
+"159.198.64" "Omada Controller"
+"TP-Link" "Omada" inurl:8043
+inurl:/api/v1 "TP-Link" OR "Omada"
+"Omada Controller" web management interface
+intitle:"Omada" OR intitle:"TP-Link" 8043
+"159.198.64.49" port:8043
+"Omada Controller" "network management"
+inurl:tplinkwifi.net "Omada"
+
+### CVE-2025-6541 & CVE-2025-6542 (OS Command Injection)
+CVE-2025-6541 "os command injection" "authenticated"
+CVE-2025-6542 "remote command injection" "unauthenticated"
+"TP-Link" "command injection" "/api/v1/network_settings"
+inurl:/api/v1/network_settings "dns_server"
+"POST /api/v1/network_settings" "dns_server"
+inurl:8043/api "dns_server" "wget"
+"1.1.1.1;" "wget" "payload"
+
+### CVE-2025-7850 (WireGuard VPN Module Command Injection)
+CVE-2025-7850 "WireGuard UI" "TP-Link"
+"WireGuard" "Private Key" "TP-Link" command injection
+inurl:8043 "wireguard" "vpn module"
+"V0FSTklOR19USElTX0lTX0FfRkFLRV9LRVk=" OR "WireGuard_THIS_IS_A_FAKE_KEY"
+
+### CVE-2025-7851 (Debug Code Local Privilege Escalation)
+CVE-2025-7851 "cli_server" "debug" "root"
+"cli_server --enable-hidden-debug-root"
+"debug root shell" "TP-Link"
+inurl:8043 "cli_server" "hidden debug"
+"ssh root@router.local"
+
+### Geographic & Email Targeting
+"90064" "Los Angeles" "TP-Link" OR "Omada"
+"casaserrana@tp-link.com"
+"kathyserrana@tp-link.com"
+"casa serena" "Omada Controller" cameras
+"casa serena" "159.198.64" OR "159.198.64.49"
+site:tplinkcloud.com 159.198.64
+
+### Direct IP & Port Targeting
+"159.198.64.49:8043/login"
+"159.198.64.49:8043/api/info"
+"159.198.64.49:8043/api"
+inurl:159.198.64.49 OR inurl:159.198.64
+inurl:8043 "Omada" login
+
+### API Exploitation Chains
+inurl:8043/api "dns_server" "wget"
+inurl:"router.local" "api/v1"
+"dns_server" "8.8.8.8;" command injection
+"/system/bin/network config --dns" "cat /etc/passwd"
+inurl:/api/v1 "network_settings" OR "dns"
+
+### Censys Queries (Shodan Alternative)
+host.location.postal_code="90064" AND host.location.city="Los Angeles" AND (host.services.software.vendor="TP-Link")
+host.services.software.vendor="TP-Link" AND host.services.port=8043
+host.services.software.product="Omada" AND host.location.country="US"
+
+### Third-Party Vendor Camera Systems (Omada-based)
+"Omada Controller" "camera" "management"
+"TP-Link" "camera control" "wall of cameras"
+inurl:8043 "camera" OR "poe" OR "nvr"
+"Omada Controller" "third party" camera integration
+
+### Network Reconnaissance
+inurl:8043 "network config" OR "network settings"
+inurl:tplinkwifi.net gateway management
+"Omada" "device list" OR "device management"
+inurl:8043 "firmware" OR "version"
+"TP-Link" "authenticated" "network_settings"
