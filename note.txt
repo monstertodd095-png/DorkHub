@@ -1,1 +1,10 @@
 http://admin:admin@192.168.1.20/videostream.cgi?user=admin&pwd=admin&resolution=32&rate=0 
+
+
+https://wavedigger.networksurvey.app/?tab=location
+
+use the data from the url above and cross refrence with the data from https://hacked.camera/map/ and then use search engines like shodan or censys for further enumeration. and then 
+modd or customize the proper dorks or search for cve / exploit . 
+
+
+
